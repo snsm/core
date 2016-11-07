@@ -19,6 +19,8 @@ class CreateTissuesTable extends Migration
             $table->string('tissue_coding')->nullable()->comment('组织编码');
             $table->tinyInteger('tissue_type')->comment('组织类型');
             $table->tinyInteger('tissue_class')->comment('组织级别');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
