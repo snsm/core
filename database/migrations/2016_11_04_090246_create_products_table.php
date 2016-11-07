@@ -15,10 +15,10 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('product_name');
-            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('user_id')->nullable()->comment('用户ID业务员');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->unsignedInteger('company_id');
+            $table->string('Policy')->comment('保单号');
+            $table->unsignedInteger('company_id')->comment('保险公司ID');
             $table->timestamps();
             $table->softDeletes();
         });

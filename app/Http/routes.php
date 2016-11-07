@@ -14,3 +14,6 @@
 $app->get('/', function () use ($app) {
     return $app->version();
 });
+
+$app->get('/user/register','UsersController@register');
+$app->post('/user/register','UsersController@store');
