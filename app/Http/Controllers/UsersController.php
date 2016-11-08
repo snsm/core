@@ -4,48 +4,64 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\User;
+use Auth;
 
 class UsersController extends Controller
 {
 
-    public function index()
-    {
+    private $salt;
 
+    public function __construct()
+    {
+        $this->salt="userloginregister";
     }
 
-    public function login()
+    //用户登录
+    public function Login(Request $request)
     {
+        if ($request->has('mobile') && $request->has('password')) {
 
-    }
+            $user = User:: where("mobile", "=", $request->input('mobile'))->where("password", "=", sha1($this->salt.$request->input('password')))->first();
 
-    public function register()
-    {
-        return 'ok';
-    }
+            if ($user) {
+                $token=str_random(60);
+                $user->api_token=$token;
+                $user->save();
+                return $user->api_token;
+            } else {
+                return "用户名或密码不正确，登录失败！";
+            }
 
-    public function store(Request $request)
-    {
-        //1、验证
-        $validator = \Validator::make($request->input(), [
-            'mobile' => 'required|unique:users',
-            'password' => 'required',
-        ]);
-
-        //2、判断验证是否正确
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'failed',
-                'status_code' => '404',
-                'data' => '该手机号已被他人注册'
-            ]);
+        } else {
+            return "登录信息不完整，请输入用户名和密码登录！";
         }
-
-        //3、接受参数并且保存数据
-        User::create([
-            'mobile' => $request->get('mobile'),
-            'password' => app('hash')->make($request->get('password')),
-        ]);
-
-        return redirect('user/register');
     }
+
+    //用户注册
+    public function Register(Request $request)
+    {
+        if ($request->has('mobile') && $request->has('password')) {
+
+            $user = new User;
+            $user->mobile=$request->input('mobile');
+            $user->password=sha1($this->salt.$request->input('password'));
+            $user->api_token=str_random(60);
+
+            if($user->save()){
+                return "用户注册成功！";
+            } else {
+                return "用户注册失败！";
+            }
+
+        } else {
+            return "请输入完整用户信息！";
+        }
+    }
+
+    //用户信息查询
+    public function Info()
+    {
+        return Auth::user();
+    }
+
 }

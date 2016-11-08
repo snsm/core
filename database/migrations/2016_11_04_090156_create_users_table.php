@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable()->comment('密码');
             $table->tinyInteger('sex')->nullable()->comment('性别');
             $table->tinyInteger('status')->comment('用户状态');
+            $table->string('api_token', 60)->unique();
             $table->timestamps();
             $table->softDeletes();
         });

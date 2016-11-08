@@ -15,5 +15,11 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
-$app->get('/user/register','UsersController@register');
-$app->post('/user/register','UsersController@store');
+//用户登录
+$app->post('user/login', 'UsersController@Login');
+
+//用户注册
+$app->post('user/register', 'UsersController@Register');
+
+//用户信息查询
+$app->get('user/info', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Info']);
