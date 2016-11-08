@@ -21,19 +21,35 @@ class UsersController extends Controller
     {
         if ($request->has('mobile') && $request->has('password')) {
 
-            $user = User:: where("mobile", "=", $request->input('mobile'))->where("password", "=", sha1($this->salt.$request->input('password')))->first();
+            $user = User::where("mobile", "=", $request->input('mobile'))->where("password", "=", sha1($this->salt.$request->input('password')))->first();
 
             if ($user) {
+
                 $token=str_random(60);
                 $user->api_token=$token;
                 $user->save();
-                return $user->api_token;
+
+                return response()->json([
+                    'status' => 'ok',
+                    'data' => $user->api_token
+                ]);
+
             } else {
-                return "用户名或密码不正确，登录失败！";
+
+                return response()->json([
+                    'status' => 'failed',
+                    'status_code' => '404',
+                    'data' => '用户名或密码不正确，登录失败！'
+                ]);
+
             }
 
         } else {
-            return "登录信息不完整，请输入用户名和密码登录！";
+            return response()->json([
+                'status' => 'failed',
+                'status_code' => '404',
+                'data' => '登录信息不完整，请输入用户名和密码登录！'
+            ]);
         }
     }
 
@@ -48,20 +64,38 @@ class UsersController extends Controller
             $user->api_token=str_random(60);
 
             if($user->save()){
-                return "用户注册成功！";
+
+                return response()->json([
+                    'status' => 'ok',
+                    'data' => '用户注册成功！'
+                ]);
+
             } else {
-                return "用户注册失败！";
+
+                return response()->json([
+                    'status' => 'failed',
+                    'status_code' => '404',
+                    'data' => '用户注册失败！'
+                ]);
+
             }
 
         } else {
-            return "请输入完整用户信息！";
+
+            return response()->json([
+                'status' => 'failed',
+                'status_code' => '404',
+                'data' => '请输入完整用户信息！'
+            ]);
+
         }
     }
 
     //用户信息查询
     public function Info()
     {
-        return Auth::user();
+        dd(Auth::user());
+       // return Auth::user();
     }
 
 }

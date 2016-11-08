@@ -59,13 +59,13 @@ $app->singleton(
 |
 */
 
-//  $app->middleware([
-//   App\Http\Middleware\ExampleMiddleware::class
-// ]);
+  $app->middleware([
+   App\Http\Middleware\ExampleMiddleware::class
+ ]);
 
-//  $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-//  ]);
+  $app->routeMiddleware([
+     'auth' => App\Http\Middleware\Authenticate::class,
+  ]);
 
 $app->routeMiddleware([
     'authToken' => App\Http\Middleware\AuthToken::class,
@@ -84,7 +84,9 @@ $app->routeMiddleware([
 
  $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+ $app->register(App\Providers\EventServiceProvider::class);
+ $app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------
