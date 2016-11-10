@@ -19,7 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('mobile')->unique()->nullable()->comment('手机号');
             $table->string('password')->nullable()->comment('密码');
             $table->tinyInteger('status')->comment('用户状态');
-            $table->string('api_token', 60)->unique()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

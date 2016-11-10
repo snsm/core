@@ -19,17 +19,22 @@ $app->get('/', function () use ($app) {
 //API版本1
 $app->group(['namespace' => 'App\Http\Controllers\V1'], function() use ($app)
 {
-    //用户登录
+    //用户登录区--------------
     $app->post('user/login', 'UsersController@Login');
     //用户信息
     $app->get('user/show', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Show']);
     //用户更新
-    $app->post('user/update/{id}', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Update']);
+    $app->post('user/update', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Update']);
     //用户删除
     $app->get('user/delete/{id}', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Delete']);
     //创建用户
     $app->post('user/store', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Store']);
     //用户退出
     $app->get('user/logout', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Logout']);
+
+    //组织目录区--------------
+    $app->get('tissue/index', [ 'middleware' => 'authToken', 'uses' => 'TissuesController@Index']);
+    //创建组织
+    $app->post('tissue/create', [ 'middleware' => 'authToken', 'uses' => 'TissuesController@Create']);
 
 });
