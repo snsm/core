@@ -1,21 +1,26 @@
 <?php
 
 namespace App\Http\Controllers\V1;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use Illuminate\Http\Request;
 
 use App\User;
 use Auth;
 use Cache;
 
+use App\Transformer\UserTransformer;
 
-class UsersController extends Controller
+class UsersController extends ApiController
 {
+
+    protected $UserTransformer;
 
     private $salt;
 
-    public function __construct()
+    public function __construct(UserTransformer $UserTransformer)
     {
+        $this->UserTransformer = $UserTransformer;
+
         $this->salt="userloginregister";
     }
 
@@ -34,45 +39,90 @@ class UsersController extends Controller
                     'user'=>$user,
                 ];
 
-                Cache::add('token',$tokenVerify,1);
+                Cache::add('token',$tokenVerify,20);
 
-                return response()->json([
-                    'status' => 'ok',
-                    'token' => $tokenVerify['token']
+                return $this->setStatusCode(201)->response([
+                    'status' => 'success',
+                    'token' => $tokenVerify['token'],
+                    'massage' => '登录成功！'
                 ]);
 
             } else {
-                return response()->json([
-                    'data' => '用户名或密码不正确，登录失败！'
-                ]);
+                return $this->setStatusCode(422)->responseError('用户名或密码不正确，登录失败！');
             }
 
         } else {
-            return response()->json([
-                'data' => '登录信息不完整，请输入用户名和密码登录！'
-            ]);
+            return $this->setStatusCode(422)->responseError('登录信息不完整，请输入用户名和密码登录！');
         }
     }
 
+    //用户退出
+    public function logout(){
+        Cache::flush();
+        return redirect('/');
+    }
+
     //用户信息
-    public function Info()
+    public function Show()
     {
-       $value = Cache::get('token');
-
-        return $value['token'];
-
-      // return sha1($this->salt.'123456');
+        $user = User::all();
+        return $this->response([
+            'status' => 'success',
+            'data' => $this->UserTransformer->transformCollection($user->toArray())
+        ]);
     }
 
     //用户更新
-    public function Update(Request $request)
+    public function Update(Request $request,$id)
     {
+        $user = User::find($id);
+        $user->name = $request->input('name');
+        $user->password = sha1($this->salt.$request->input('password'));
+        $user->save();
+
+        return $this->setStatusCode(201)->response([
+            'status' => 'success',
+            'massage' => '更新成功！'
+        ]);
 
     }
 
     //用户删除
-    public function Delete(Request $request)
+    public function Delete($id)
     {
+        User::find($id)->delete();
+        return $this->setStatusCode(201)->response([
+            'status' => 'success',
+            'massage' => '删除成功！'
+        ]);
+    }
+
+    //创建用户
+    public function Store(Request $request)
+    {
+        //1、验证
+        $validator = \Validator::make($request->input(), [
+            'name' => 'required',
+            'mobile' => 'required|unique:users',
+            'password' => 'required',
+        ]);
+
+        //2、判断验证是否正确
+        if ($validator->fails()) {
+            return $this->setStatusCode(422)->responseError('该手机号已被他人注册');
+        }
+
+        //3、接受参数并且保存数据
+        User::create([
+            'name' => $request->get('name'),
+            'mobile' => $request->get('mobile'),
+            'password' => sha1($this->salt.$request->input('password')),
+        ]);
+
+        return $this->setStatusCode(201)->response([
+            'status' => 'success',
+            'massage' => '创建成功！'
+        ]);
 
     }
 
