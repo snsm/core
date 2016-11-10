@@ -10,6 +10,7 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+use Illuminate\Http\Request;
 
 $app->get('/', function () use ($app) {
     return $app->version();
@@ -23,6 +24,13 @@ $app->group(['namespace' => 'App\Http\Controllers\V1'], function() use ($app)
     $app->post('user/login', 'UsersController@Login');
 
     //用户信息
-    $app->get('user/info/{id}', 'UsersController@Info');
+    $app->get('user/info', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Info']);
+
+    /*$app->get('user/info', ['middleware' => 'auth', function (Request $request) {
+        $user = Auth::user();
+        dd($user);
+        $user = $request->user();
+
+    }]);*/
 
 });

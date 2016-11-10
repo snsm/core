@@ -28,12 +28,17 @@ class UsersController extends Controller
             $user = User:: where("mobile", "=", $request->input('mobile'))->where("password", "=", sha1($this->salt.$request->input('password')))->first();
 
             if ($user) {
-                $token=str_random(60);
-                Cache::add($token,$user,5);
+
+                $tokenVerify = [
+                    'token'=>str_random(60),
+                    'user'=>$user,
+                ];
+
+                Cache::add('token',$tokenVerify,1);
 
                 return response()->json([
                     'status' => 'ok',
-                    'token' => $token
+                    'token' => $tokenVerify['token']
                 ]);
 
             } else {
@@ -50,11 +55,13 @@ class UsersController extends Controller
     }
 
     //用户信息
-    public function Info(Request $request)
+    public function Info()
     {
-        return Cache::get();
+       $value = Cache::get('token');
 
-       //return sha1($this->salt.'123456');
+        return $value['token'];
+
+      // return sha1($this->salt.'123456');
     }
 
     //用户更新
