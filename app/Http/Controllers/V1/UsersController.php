@@ -81,8 +81,11 @@ class UsersController extends ApiController
     //用户删除
     public function Delete($id)
     {
-        User::find($id)->delete();
-        return $this->setStatusCode(201)->response([
+        if(!$user = User::find($id)){
+            return $this->responseNotFount();
+        }
+        $user->delete();
+        return $this->setStatusCode(200)->response([
             'status' => 'success',
             'massage' => '删除成功！'
         ]);
@@ -104,15 +107,16 @@ class UsersController extends ApiController
         }
 
         //3、接受参数并且保存数据
-        User::create([
+       $user = User::create([
             'name' => $request->get('name'),
             'mobile' => $request->get('mobile'),
+            'status' => $request->get('status'),
             'password' => sha1($this->salt.$request->input('password')),
         ]);
 
         return $this->setStatusCode(201)->response([
             'status' => 'success',
-            'massage' => '创建成功！'
+            'data' => $user->toArray()
         ]);
     }
 
