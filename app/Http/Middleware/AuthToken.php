@@ -9,13 +9,11 @@ class AuthToken
 {
     public function handle($request, Closure $next)
     {
-        $value = Cache::get('token');
-        if($value['token']){
+        if(Cache::get('token')){
             return $next($request);
         }else{
             return redirect('/');
         }
-
 
        /* if(Auth::check()){
             return $next($request);

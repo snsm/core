@@ -25,9 +25,9 @@ class ApiController extends Controller
         return $this;
     }
 
-    public function responseNotFount($message = 'Not Fount')
+    public function responseNotFount($message = 'Not Fount',$status = '404')
     {
-        return $this->setStatusCode(404)->responseError($message);
+        return $this->setStatusCode($status)->responseError($message);
     }
 
     public function responseError($message)

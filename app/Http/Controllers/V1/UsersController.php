@@ -24,6 +24,15 @@ class UsersController extends ApiController
     //用户登录
     public function Login(Request $request)
     {
+        //判断accessToken是否存在，并且验证当前用户名
+        if(Cache::get('token') && Cache::get('token')['user']['mobile']==$request->input('mobile')){
+            return $this->setStatusCode(201)->response([
+                'status' => 'success',
+                'messages' => '用户已登录！'
+            ]);
+        }
+
+        //判断验证接收参数是否为空，并且接收参数与查询数据是否一致
         if ($request->has('mobile') && $request->has('password')) {
             $user = User:: where("mobile", "=", $request->input('mobile'))->where("password", "=", sha1($this->salt.$request->input('password')))->first();
             if ($user) {
@@ -48,7 +57,10 @@ class UsersController extends ApiController
     //用户退出
     public function logout(){
         Cache::pull('token');
-        return redirect('/');
+        return $this->setStatusCode(200)->response([
+            'status' => 'success',
+            'messages' => '退出成功！'
+        ]);
     }
 
     //用户信息
