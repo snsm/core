@@ -22,18 +22,18 @@ $app->group(['namespace' => 'App\Http\Controllers\V1'], function() use ($app)
     //用户登录区--------------
     $app->post('user/login', 'UsersController@Login');
     //用户信息
-    $app->get('user/show', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Show']);
+    $app->post('user/show', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Show']);
     //用户更新
     $app->post('user/update', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Update']);
     //用户删除
-    $app->get('user/delete/{id}', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Delete']);
+    $app->post('user/delete', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Delete']);
     //创建用户
     $app->post('user/store', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Store']);
     //用户退出
-    $app->get('user/logout', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Logout']);
+    $app->post('user/logout', [ 'middleware' => 'authToken', 'uses' => 'UsersController@Logout']);
 
     //组织目录区--------------
-    $app->get('tissue/index', [ 'middleware' => 'authToken', 'uses' => 'TissuesController@Index']);
+    $app->post('tissue/index', [ 'middleware' => 'authToken', 'uses' => 'TissuesController@Index']);
     //创建组织
     $app->post('tissue/create', [ 'middleware' => 'authToken', 'uses' => 'TissuesController@Create']);
 

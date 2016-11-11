@@ -57,7 +57,7 @@ class UsersController extends ApiController
     //用户退出
     public function logout(){
         Cache::pull('token');
-        return $this->setStatusCode(200)->response([
+        return $this->setStatusCode(201)->response([
             'status' => 'success',
             'messages' => '退出成功！'
         ]);
@@ -91,9 +91,9 @@ class UsersController extends ApiController
     }
 
     //用户删除
-    public function Delete($id)
+    public function Delete(Request $request)
     {
-        if(!$user = User::find($id)){
+        if(!$user = User::find($request->input('id'))){
             return $this->responseNotFount();
         }
         $user->delete();
