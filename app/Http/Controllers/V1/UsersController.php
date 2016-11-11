@@ -18,7 +18,7 @@ class UsersController extends ApiController
     public function __construct(UserTransformer $UserTransformer)
     {
         $this->UserTransformer = $UserTransformer;
-        $this->salt="userloginregister";
+        $this->salt="user_login_register";
     }
 
     //用户登录
@@ -47,7 +47,7 @@ class UsersController extends ApiController
 
     //用户退出
     public function logout(){
-        Cache::flush();
+        Cache::pull('token');
         return redirect('/');
     }
 
