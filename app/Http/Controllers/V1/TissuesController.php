@@ -23,13 +23,14 @@ class TissuesController extends ApiController
             'tissue_name' => 'required',
             'tissue_coding' => 'required|unique:tissues',
             'tissue_type' => 'required',
-            'tissue_class' => 'required',
-            'tissue_user_id' => 'required',
+            'parent_id' => 'required',
+            'tissue_level' => 'required',
+            'tissue_order' => 'required',
         ]);
 
         //2、判断验证是否正确
         if ($validator->fails()) {
-            return $this->setStatusCode(422)->responseError('创建失败！');
+            return $this->setStatusCode(422)->responseError($validator->messages());
         }
 
         //3、接受参数并且保存数据
@@ -37,8 +38,9 @@ class TissuesController extends ApiController
             'tissue_name' => $request->get('tissue_name'),
             'tissue_coding' => $request->get('tissue_coding'),
             'tissue_type' => $request->get('tissue_type'),
-            'tissue_class' => $request->get('tissue_class'),
-            'tissue_user_id' => $request->get('tissue_user_id'),
+            'parent_id' => $request->get('parent_id'),
+            'tissue_level' => $request->get('tissue_level'),
+            'tissue_order' => $request->get('tissue_order'),
         ]);
 
         return $this->setStatusCode(201)->response([
