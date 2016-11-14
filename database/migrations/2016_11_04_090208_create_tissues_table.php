@@ -18,9 +18,9 @@ class CreateTissuesTable extends Migration
             $table->string('tissue_name')->nullable()->comment('组织名称');
             $table->string('tissue_coding')->nullable()->comment('组织编码');
             $table->tinyInteger('tissue_type')->comment('组织类型');
-            $table->tinyInteger('tissue_class')->comment('组织级别');
-            $table->unsignedInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('parent_id')->default(0)->comment('上级组织ID');
+            $table->integer('tissue_level')->default(1)->comment('组织级别');
+            $table->integer('tissue_order')->default(0)->comment('排序权重');
             $table->timestamps();
             $table->softDeletes();
         });
