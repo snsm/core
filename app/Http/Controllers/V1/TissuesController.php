@@ -4,15 +4,18 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\ApiController;
 use App\Tissue;
 use Illuminate\Http\Request;
-use App\Transformer\UserTransformer;
 
 
 class TissuesController extends ApiController
 {
-    //组织列表
+    ////显示所有组织列表
     public function Index()
     {
-        return 'ok';
+        $tissue = Tissue::all();
+        return $this->response([
+            'status' => 'success',
+            'data' => $tissue->toArray()
+        ]);
     }
 
     //创建组织
@@ -40,4 +43,50 @@ class TissuesController extends ApiController
             'data' => $tissue->toArray()
         ]);
     }
+
+    //更新组织列表
+    public function Update(Request $request)
+    {
+        //1、验证
+        $validator = \Validator::make($request->input(), [
+            'id' => 'required',
+            'tissue_name' => 'required',
+            'tissue_type' => 'required',
+            'parent_id' => 'required',
+            'tissue_order' => 'required',
+        ]);
+
+        //2、判断验证是否正确
+        if ($validator->fails()) {
+            return $this->setStatusCode(422)->responseError($validator->messages());
+        }
+
+        $tissue = Tissue::find($request->input('id'));
+        if(!$tissue){
+            return $this->responseNotFount();
+        }
+        $tissue->tissue_name = $request->input('tissue_name');
+        $tissue->tissue_type = $request->input('tissue_type');
+        $tissue->parent_id = $request->input('parent_id');
+        $tissue->tissue_order = $request->input('tissue_order');
+        $tissue->save();
+        return $this->setStatusCode(201)->response([
+            'status' => 'success',
+            'data' => $tissue->toArray()
+        ]);
+    }
+
+    //删除组织列表
+    public function Delete(Request $request)
+    {
+        if(!$tissue = Tissue::find($request->input('id'))){
+            return $this->responseNotFount();
+        }
+        $tissue->delete();
+        return $this->setStatusCode(200)->response([
+            'status' => 'success',
+            'massage' => '删除成功！'
+        ]);
+    }
+
 }
