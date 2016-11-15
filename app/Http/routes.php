@@ -29,6 +29,8 @@ $app->group(['namespace' => 'App\Http\Controllers\V1'], function() use ($app)
 
     //组织目录区--------------
     $app->post('tissue/index', [ 'middleware' => 'authToken', 'uses' => 'TissuesController@Index']);
+    //创建公司名称
+    $app->post('tissue/create-company', [ 'middleware' => 'authToken', 'uses' => 'TissuesController@createCompany']);
     //创建组织
     $app->post('tissue/create', [ 'middleware' => 'authToken', 'uses' => 'TissuesController@Create']);
 

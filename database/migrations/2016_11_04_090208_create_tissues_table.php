@@ -15,11 +15,8 @@ class CreateTissuesTable extends Migration
     {
         Schema::create('tissues', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('tissue_name')->nullable()->comment('组织名称');
-            $table->string('tissue_coding')->nullable()->comment('组织编码');
-            $table->tinyInteger('tissue_type')->comment('组织类型');
-            $table->integer('parent_id')->default(0)->comment('上级组织ID');
-            $table->integer('tissue_order')->default(0)->comment('排序权重');
+            $table->string('tissue_company_name')->nullable()->comment('组织名称');
+            $table->string('tissue_company_coding')->nullable()->comment('组织编码');
             $table->timestamps();
             $table->softDeletes();
         });
