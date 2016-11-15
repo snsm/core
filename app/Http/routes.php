@@ -11,11 +11,6 @@
 |
 */
 
-$app->get('/', function () use ($app) {
-    return $app->version();
-});
-
-
 //API版本1
 $app->group(['namespace' => 'App\Http\Controllers\V1'], function() use ($app)
 {

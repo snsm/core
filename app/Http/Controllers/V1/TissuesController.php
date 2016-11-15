@@ -24,7 +24,6 @@ class TissuesController extends ApiController
             'tissue_coding' => 'required|unique:tissues',
             'tissue_type' => 'required',
             'parent_id' => 'required',
-            'tissue_level' => 'required',
             'tissue_order' => 'required',
         ]);
 
@@ -39,7 +38,6 @@ class TissuesController extends ApiController
             'tissue_coding' => $request->get('tissue_coding'),
             'tissue_type' => $request->get('tissue_type'),
             'parent_id' => $request->get('parent_id'),
-            'tissue_level' => $request->get('tissue_level'),
             'tissue_order' => $request->get('tissue_order'),
         ]);
 

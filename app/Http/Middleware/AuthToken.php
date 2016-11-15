@@ -17,7 +17,7 @@ class AuthToken
             return $next($request);
 
         }else{
-            return redirect('/');
+            return (new ApiController())->responseNotFount('请登陆！',422);
         }
 
        /* if(Auth::check()){
