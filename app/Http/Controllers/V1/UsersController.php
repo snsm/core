@@ -87,6 +87,7 @@ class UsersController extends ApiController
         $user->password = sha1($this->salt.$request->input('password'));
         $user->status = $request->input('status');
         $user->save();
+
         return $this->setStatusCode(201)->response([
             'status' => 'success',
             'data' => $user->toArray()
@@ -122,12 +123,8 @@ class UsersController extends ApiController
         }
 
         //3、接受参数并且保存数据
-       $user = User::create([
-            'name' => $request->get('name'),
-            'mobile' => $request->get('mobile'),
-            'status' => $request->get('status'),
-            'password' => sha1($this->salt.$request->input('password')),
-        ]);
+        $users = [ 'password' => sha1($this->salt.$request->input('password'))];
+        $user = User::create(array_merge($request->all(),$users));
 
         return $this->setStatusCode(201)->response([
             'status' => 'success',

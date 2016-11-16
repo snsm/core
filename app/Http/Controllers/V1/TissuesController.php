@@ -74,11 +74,8 @@ class TissuesController extends ApiController
         if(!$tissue){
             return $this->responseNotFount();
         }
-        $tissue->tissue_name = $request->input('tissue_name');
-        $tissue->tissue_type = $request->input('tissue_type');
-        $tissue->parent_id = $request->input('parent_id');
-        $tissue->tissue_order = $request->input('tissue_order');
-        $tissue->save();
+        $tissue->save($request->all());
+
         return $this->setStatusCode(201)->response([
             'status' => 'success',
             'data' => $tissue->toArray()
