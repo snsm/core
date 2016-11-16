@@ -115,7 +115,7 @@ class UsersController extends ApiController
 
         //2、判断验证是否正确
         if ($validator->fails()) {
-            return $this->setStatusCode(422)->responseError('该手机号已被他人注册');
+            return $this->setStatusCode(422)->responseError($validator->messages());
         }
 
         //3、接受参数并且保存数据
