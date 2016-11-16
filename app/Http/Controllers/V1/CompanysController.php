@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Transformer\UserTransformer;
 
 
-class TissuesController extends ApiController
+class CompanysController extends ApiController
 {
-
+    
 }
