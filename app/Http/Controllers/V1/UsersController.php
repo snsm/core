@@ -67,6 +67,9 @@ class UsersController extends ApiController
     public function Show()
     {
         $user = User::all();
+        if(!$user->toArray()){
+            return $this->responseNotFount('暂无数据',422);
+        }
         return $this->response([
             'status' => 'success',
             'data' => $this->UserTransformer->transformCollection($user->toArray())

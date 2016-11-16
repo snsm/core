@@ -12,6 +12,9 @@ class TissuesController extends ApiController
     public function Index()
     {
         $tissue = Tissue::all();
+        if(!$tissue->toArray()){
+            return $this->responseNotFount('暂无数据',422);
+        }
         return $this->response([
             'status' => 'success',
             'data' => $tissue->toArray()
@@ -33,6 +36,12 @@ class TissuesController extends ApiController
         //2、判断验证是否正确
         if ($validator->fails()) {
             return $this->setStatusCode(422)->responseError($validator->messages());
+        }
+
+        //检测接收parent_id是否正确
+        $res = Tissue::all()->where('id','=',$request->get('parent_id'));
+        if(!$res->toArray() && $request->get('parent_id') != 0){
+           return $this->responseNotFount('父级ID错误或不存在',422);
         }
 
         //3、接受参数并且保存数据
