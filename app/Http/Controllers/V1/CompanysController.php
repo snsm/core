@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 use App\Http\Controllers\ApiController;
+use App\Insurance;
 use App\InsuranceType;
 use Illuminate\Http\Request;
 use App\Transformer\UserTransformer;
@@ -65,10 +66,73 @@ class CompanysController extends ApiController
     //删除保险公司类型
     public function deleteCompanyType(Request $request){
 
-        if(!$tissue = InsuranceType::find($request->input('id'))){
+        if(!$insurance_type = InsuranceType::find($request->input('id'))){
             return $this->responseNotFount();
         }
-        $tissue->delete();
+        $insurance_type->delete();
+        return $this->setStatusCode(200)->response([
+            'status' => 'success',
+            'massage' => '删除成功！'
+        ]);
+    }
+
+
+    //创建新增保险公司险种
+    public function createInsurance(Request $request){
+
+        $validator = \Validator::make($request->input(), [
+            'insurance_name' => 'required',
+            'insurance_coding' => 'required|unique:insurances',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->setStatusCode(422)->responseError($validator->messages());
+        }
+
+        $insurance_type = Insurance::create($request->all());
+        return $this->setStatusCode(201)->response([
+            'status' => 'success',
+            'data' => $insurance_type->toArray()
+        ]);
+    }
+
+    //更新保险公司险种
+    public function updateInsurance(Request $request){
+
+        $validator = \Validator::make($request->input(), [
+            'id' => 'required',
+            'insurance_name' => 'required',
+            'insurance_coding' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->setStatusCode(422)->responseError($validator->messages());
+        }
+
+        $insurance = Insurance::find($request->input('id'));
+        if(!$insurance){
+            return $this->responseNotFount();
+        }
+
+        $insurance->insurance_name = $request->input('insurance_name');
+        $insurance->insurance_coding = $request->input('insurance_coding');
+
+        $insurance->save();
+
+        return $this->setStatusCode(201)->response([
+            'status' => 'success',
+            'data' => $insurance->toArray()
+        ]);
+
+    }
+
+    //删除保险公司险种
+    public function deleteInsurance(Request $request){
+
+        if(!$insurance = Insurance::find($request->input('id'))){
+            return $this->responseNotFount();
+        }
+        $insurance->delete();
         return $this->setStatusCode(200)->response([
             'status' => 'success',
             'massage' => '删除成功！'

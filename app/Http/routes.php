@@ -50,7 +50,11 @@ $app->group(['namespace' => 'App\Http\Controllers\V1'], function() use ($app)
     //删除保险公司类型
     $app->post('company/delete-company-type', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@deleteCompanyType']);
 
-    //创建保险险种栏目
+    //创建新增保险公司险种
     $app->post('company/create-insurance', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@createInsurance']);
+    //更新保险公司险种
+    $app->post('company/update-insurance', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@updateInsurance']);
+    //删除保险公司险种
+    $app->post('company/delete-insurance', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@deleteInsurance']);
 
 });
