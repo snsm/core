@@ -13,6 +13,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+        //登录注册用户表
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable()->comment('真实姓名');

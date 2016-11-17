@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class TissuesController extends ApiController
 {
-    ////显示所有组织列表
+    //显示所有组织列表
     public function Index()
     {
-        $tissue = Tissue::all();
+        $tissue = Tissue::orderBy('tissue_order','desc');
         if(!$tissue->toArray()){
             return $this->responseNotFount('暂无数据',422);
         }
@@ -21,7 +21,7 @@ class TissuesController extends ApiController
         ]);
     }
 
-    //创建组织
+    //创建新增公司组织架构
     public function Create(Request $request)
     {
         //1、验证
@@ -53,7 +53,7 @@ class TissuesController extends ApiController
         ]);
     }
 
-    //更新组织列表
+    //更新公司组织架构
     public function Update(Request $request)
     {
         //1、验证
@@ -82,7 +82,7 @@ class TissuesController extends ApiController
         ]);
     }
 
-    //删除组织列表
+    //删除公司组织架构
     public function Delete(Request $request)
     {
         if(!$tissue = Tissue::find($request->input('id'))){

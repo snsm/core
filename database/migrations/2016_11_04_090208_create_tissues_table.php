@@ -13,6 +13,7 @@ class CreateTissuesTable extends Migration
      */
     public function up()
     {
+        //公司组织架构表
         Schema::create('tissues', function (Blueprint $table) {
             $table->increments('id');
             $table->string('tissue_name')->nullable()->comment('组织名称');

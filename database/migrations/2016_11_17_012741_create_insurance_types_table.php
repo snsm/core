@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInsurancesTable extends Migration
+class CreateInsuranceTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateInsurancesTable extends Migration
      */
     public function up()
     {
-        //保险险种表
-        Schema::create('insurances', function (Blueprint $table) {
+        //保险类型表
+        Schema::create('insurance_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('insurance_name')->comment('险种名称');
-            $table->string('insurance_coding')->nullable()->comment('保险编码');
+            $table->string('insurance_type_name')->comment('保险类型名称');
+            $table->string('insurance_type_coding')->nullable()->comment('保险类型编号');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +30,6 @@ class CreateInsurancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('insurances');
+        Schema::dropIfExists('insurance_types');
     }
 }

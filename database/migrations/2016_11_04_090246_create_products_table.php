@@ -13,6 +13,7 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
+        //保单产品表
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable()->comment('用户ID业务员');
