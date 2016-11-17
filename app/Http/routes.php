@@ -42,7 +42,9 @@ $app->group(['namespace' => 'App\Http\Controllers\V1'], function() use ($app)
 
     //保险公司目录区--------------
 
+    //显示所有保险公司列表
     $app->post('company/index', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@Index']);
+
     //创建新增保险公司类型
     $app->post('company/create-company-type', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@createCompanyType']);
     //更新保险公司类型
@@ -56,5 +58,12 @@ $app->group(['namespace' => 'App\Http\Controllers\V1'], function() use ($app)
     $app->post('company/update-insurance', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@updateInsurance']);
     //删除保险公司险种
     $app->post('company/delete-insurance', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@deleteInsurance']);
+
+    //创建新增保险公司
+    $app->post('company/create-company', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@createCompany']);
+    //更新保险公司
+    $app->post('company/update-company', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@updateCompany']);
+    //删除保险公司
+    $app->post('company/delete-company', [ 'middleware' => 'authToken', 'uses' => 'CompanysController@deleteCompany']);
 
 });

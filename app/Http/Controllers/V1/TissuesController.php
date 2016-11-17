@@ -11,7 +11,7 @@ class TissuesController extends ApiController
     //显示所有组织列表
     public function Index()
     {
-        $tissue = Tissue::orderBy('tissue_order','desc');
+        $tissue = Tissue::orderBy('tissue_order','desc')->get();
         if(!$tissue->toArray()){
             return $this->responseNotFount('暂无数据',422);
         }
